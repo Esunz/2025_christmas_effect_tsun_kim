@@ -277,23 +277,25 @@
 
         .close-btn:hover { opacity: 1; }
 
-        /* 상태 표시 */
+        /* 상태 표시 - 등장 후 사라짐 */
         .status {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            color: rgba(255, 215, 0, 0.8);
+            color: rgba(255, 215, 0, 0.9);
             font-size: 1rem;
             letter-spacing: 4px;
             z-index: 5;
-            animation: pulse 2s ease-in-out infinite;
             pointer-events: none;
+            animation: fadeInOutHint 4s ease-in-out forwards;
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.7; }
+        @keyframes fadeInOutHint {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+            15% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            70% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); display: none; }
         }
 
         /* 눈 효과 */
@@ -388,7 +390,7 @@
            반응형 디자인 - 스마트폰 해상도별 최적화
            ============================================= */
 
-        /* 모바일 터치 힌트 */
+        /* 모바일 터치 힌트 - 등장 후 사라짐 */
         .mobile-hint {
             display: none;
             position: absolute;
@@ -404,12 +406,14 @@
             text-align: center;
             z-index: 100;
             pointer-events: none;
-            animation: fadeInOut 3s ease-in-out infinite;
+            animation: fadeInOutHintMobile 4s ease-in-out forwards;
         }
 
-        @keyframes fadeInOut {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
+        @keyframes fadeInOutHintMobile {
+            0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+            15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            70% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
         }
 
         /* 줌 컨트롤 (모바일용) - 항상 표시 */
@@ -859,7 +863,7 @@
             dustCount: 1200,     // 먼지 파티클
             treeHeight: 55,      // 트리 높이 축소 (80 → 55)
             maxRadius: 22,       // 트리 반경 축소 (32 → 22)
-            camDistance: 100,    // 카메라 거리 조정 (120 → 100)
+            camDistance: 180,    // 카메라 거리 - 최대 축소 상태로 시작
             bloomStrength: 0.8,
             bloomThreshold: 0.3,
             bloomRadius: 0.7
@@ -954,7 +958,24 @@
             // 로딩 완료
             setTimeout(() => {
                 document.getElementById('loading').style.display = 'none';
-                document.getElementById('hint').style.display = 'block';
+                
+                // 힌트 표시 후 4초 뒤 완전히 제거
+                const hint = document.getElementById('hint');
+                const mobileHint = document.getElementById('mobileHint');
+                
+                if (hint) {
+                    hint.style.display = 'block';
+                    setTimeout(() => {
+                        hint.style.display = 'none';
+                    }, 4000);
+                }
+                
+                if (mobileHint && window.innerWidth <= 768) {
+                    mobileHint.style.display = 'block';
+                    setTimeout(() => {
+                        mobileHint.style.display = 'none';
+                    }, 4000);
+                }
             }, 1500);
 
             // 애니메이션 시작
@@ -1461,7 +1482,7 @@
         };
 
         window.resetCamera = function() {
-            camera.position.set(0, 5, CONFIG.camDistance);
+            camera.position.set(0, 5, 180);  // 최대 축소 상태로 리셋
             mainGroup.rotation.set(0, 0, 0);
             rotationVelocity = { x: 0, y: 0 };
         };
