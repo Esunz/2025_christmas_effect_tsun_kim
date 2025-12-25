@@ -277,26 +277,6 @@
 
         .close-btn:hover { opacity: 1; }
 
-        /* 상태 표시 - 등장 후 사라짐 */
-        .status {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: rgba(255, 215, 0, 0.9);
-            font-size: 1rem;
-            letter-spacing: 4px;
-            z-index: 5;
-            pointer-events: none;
-            animation: fadeInOutHint 4s ease-in-out forwards;
-        }
-
-        @keyframes fadeInOutHint {
-            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
-            15% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            70% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); display: none; }
-        }
 
         /* 눈 효과 */
         .snowflakes {
@@ -390,30 +370,37 @@
            반응형 디자인 - 스마트폰 해상도별 최적화
            ============================================= */
 
-        /* 모바일 터치 힌트 - 등장 후 사라짐 */
+        /* 모바일 터치 힌트 - 화면 정중앙, 등장 후 사라짐 */
         .mobile-hint {
             display: none;
             position: absolute;
-            bottom: 180px;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.7);
-            padding: 12px 20px;
-            border-radius: 30px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 0.8rem;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 16px 28px;
+            border-radius: 35px;
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            color: #ffd700;
+            font-size: 0.9rem;
             text-align: center;
-            z-index: 100;
+            z-index: 150;
             pointer-events: none;
-            animation: fadeInOutHintMobile 4s ease-in-out forwards;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .mobile-hint.show {
+            display: block;
+            animation: fadeInOutHintMobile 3.5s ease-in-out forwards;
         }
 
         @keyframes fadeInOutHintMobile {
-            0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
-            15% { opacity: 1; transform: translateX(-50%) translateY(0); }
-            70% { opacity: 1; transform: translateX(-50%) translateY(0); }
-            100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            15% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            75% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
         }
 
         /* 줌 컨트롤 (모바일용) - 항상 표시 */
@@ -494,7 +481,7 @@
                 border-radius: 20px;
             }
 
-            .mobile-hint { display: block; bottom: 160px; }
+            .mobile-hint { top: 50%; left: 50%; transform: translate(-50%, -50%); }
             .zoom-controls { display: flex; }
             .status { display: none; }
 
@@ -788,12 +775,7 @@
             <div class="year">✦ 2 0 2 5 ✦</div>
         </header>
 
-        <!-- 힌트 (PC) -->
-        <div class="status" id="hint">
-            🖱️ 드래그로 회전 • 스크롤로 확대/축소
-        </div>
-
-        <!-- 모바일 힌트 -->
+        <!-- 모바일 힌트 (화면 정중앙) -->
         <div class="mobile-hint" id="mobileHint">
             👆 한 손가락으로 회전 • 두 손가락으로 확대/축소
         </div>
@@ -959,22 +941,17 @@
             setTimeout(() => {
                 document.getElementById('loading').style.display = 'none';
                 
-                // 힌트 표시 후 4초 뒤 완전히 제거
-                const hint = document.getElementById('hint');
+                // 모바일에서만 힌트 표시 (화면 정중앙)
                 const mobileHint = document.getElementById('mobileHint');
+                const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
                 
-                if (hint) {
-                    hint.style.display = 'block';
+                if (mobileHint && isTouchDevice) {
+                    mobileHint.classList.add('show');
+                    // 3.5초 후 완전히 제거
                     setTimeout(() => {
-                        hint.style.display = 'none';
-                    }, 4000);
-                }
-                
-                if (mobileHint && window.innerWidth <= 768) {
-                    mobileHint.style.display = 'block';
-                    setTimeout(() => {
+                        mobileHint.classList.remove('show');
                         mobileHint.style.display = 'none';
-                    }, 4000);
+                    }, 3500);
                 }
             }, 1500);
 
