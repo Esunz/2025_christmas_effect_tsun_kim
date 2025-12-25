@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎄 2025 Christmas Tree by Tsun Kim 🎄</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            overflow: hidden; 
+            background-color: #050510; 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            user-select: none;
+            /* 메이플스토리 마우스 커서 */
+            cursor: url('c14773516089/일반 선택.cur'), auto;
+        }
+
+        /* 메이플스토리 커서 - 버튼/링크 호버 시 연결선택 커서 */
+        a:hover, button:hover, .control-btn:hover, .blessing-nav button:hover, .close-btn:hover {
+            cursor: url('c14773516089/연결선택.ani'), url('c14773516089/일반 선택.cur'), pointer !important;
+        }
+
+        a, button, .control-btn, .blessing-nav button, .close-btn {
+            cursor: url('c14773516089/일반 선택.cur'), auto;
+        }
+
+        /* 텍스트 선택 */
+        input, textarea, .blessing-text {
+            cursor: url('c14773516089/텍스트 선택.cur'), text;
+        }
+
+        /* 로딩/작업중 */
+        .loading {
+            cursor: url('c14773516089/사용중.ani'), url('c14773516089/일반 선택.cur'), wait;
+        }
+
+        #canvas-wrapper {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(ellipse at bottom, #1a1a2e 0%, #050510 100%);
+            overflow: hidden;
+        }
+
+        #canvas-container { 
+            width: 100%; 
+            height: 100%; 
+            display: block; 
+        }
+
+        /* 헤더 */
+        .header {
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 500;
+            letter-spacing: 5px;
+            background: linear-gradient(135deg, #ffd700, #fff, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            0% { filter: brightness(1); }
+            100% { filter: brightness(1.3); }
+        }
+
+        .header .year {
+            font-size: 1rem;
+            color: #fff;
+            letter-spacing: 0.3rem;
+            margin-top: 8px;
+            opacity: 0.9;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        /* 크레딧 - 화면 중앙 하단, 눈에 잘 보이는 위치 */
+        .credits {
+            position: absolute;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 100;
+            pointer-events: none;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px 40px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .credits .creator {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-style: italic;
+            font-weight: 600;
+            background: linear-gradient(135deg, #ffd700, #fff, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: creditGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes creditGlow {
+            0% { filter: brightness(1) drop-shadow(0 0 10px rgba(255, 215, 0, 0.5)); }
+            100% { filter: brightness(1.2) drop-shadow(0 0 20px rgba(255, 215, 0, 0.8)); }
+        }
+
+        .credits .name-kr {
+            font-size: 1.1rem;
+            color: #fff;
+            letter-spacing: 0.8rem;
+            margin-top: 8px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .credits .name-en {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 5px;
+            letter-spacing: 2px;
+        }
+
+        /* 컨트롤 버튼 */
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .control-btn {
+            padding: 12px 20px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 30px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            color: #ffd700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        /* 덕담 패널 - 화면 정중앙 */
+        .blessings-panel {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 600px;
+            width: 90%;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            z-index: 200;
+            display: none;
+            text-align: center;
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.2);
+        }
+
+        .blessings-panel.show {
+            display: block;
+            animation: fadeInCenter 0.4s ease-out;
+        }
+
+        @keyframes fadeInCenter {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .blessings-panel h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: #ffd700;
+            margin-bottom: 20px;
+        }
+
+        .blessing-text {
+            color: #fff;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .blessing-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .blessing-nav button {
+            padding: 10px 25px;
+            border: 1px solid #ffd700;
+            background: transparent;
+            color: #ffd700;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .blessing-nav button:hover {
+            background: #ffd700;
+            color: #000;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 30px;
+            height: 30px;
+            border: none;
+            background: transparent;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+
+        .close-btn:hover { opacity: 1; }
+
+        /* 상태 표시 */
+        .status {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(255, 215, 0, 0.8);
+            font-size: 1rem;
+            letter-spacing: 4px;
+            z-index: 5;
+            animation: pulse 2s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+        }
+
+        /* 눈 효과 */
+        .snowflakes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .snowflake {
+            position: absolute;
+            color: white;
+            font-size: 1rem;
+            animation: fall linear infinite;
+            text-shadow: 0 0 5px rgba(255,255,255,0.8);
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0.3; }
+        }
+
+        /* 로딩 */
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ffd700;
+            font-size: 1.2rem;
+            letter-spacing: 4px;
+            z-index: 200;
+            text-align: center;
+        }
+
+        .loading-bar {
+            width: 200px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .loading-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffd700, #fff, #ffd700);
+            animation: loadingAnim 1.5s ease-in-out infinite;
+        }
+
+        @keyframes loadingAnim {
+            0% { width: 0%; margin-left: 0; }
+            50% { width: 100%; margin-left: 0; }
+            100% { width: 0%; margin-left: 100%; }
+        }
+
+        /* 불꽃놀이 */
+        .firework-particle {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999;
+            animation: fireworkExplode 1.5s ease-out forwards;
+        }
+
+        @keyframes fireworkExplode {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+        }
+
+        /* 마우스 트레일 */
+        .mouse-trail {
+            position: fixed;
+            pointer-events: none;
+            font-size: 1rem;
+            animation: trailFade 1s ease-out forwards;
+            z-index: 1000;
+        }
+
+        @keyframes trailFade {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.5) translateY(-20px); }
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.5rem; letter-spacing: 3px; }
+            .header .year { font-size: 0.8rem; letter-spacing: 0.5rem; }
+            .credits .creator { font-size: 1.3rem; }
+            .control-btn { padding: 10px 14px; font-size: 0.75rem; }
+        }
+    </style>
+    
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="canvas-wrapper">
+        <div id="canvas-container"></div>
+
+        <!-- 로딩 -->
+        <div class="loading" id="loading">
+            <div>🎄 CRAFTING MAGIC...</div>
+            <div class="loading-bar">
+                <div class="loading-bar-fill"></div>
+            </div>
+        </div>
+
+        <!-- 헤더 -->
+        <header class="header">
+            <h1>Merry Christmas</h1>
+            <div class="year">✦ 2 0 2 5 ✦</div>
+        </header>
+
+        <!-- 힌트 -->
+        <div class="status" id="hint">
+            🖱️ 드래그로 회전 • 스크롤로 확대/축소
+        </div>
+
+        <!-- 눈 효과 -->
+        <div class="snowflakes" id="snowflakes"></div>
+
+        <!-- 덕담 패널 -->
+        <section class="blessings-panel" id="blessingsPanel">
+            <button class="close-btn" onclick="closeBlessings()">×</button>
+            <h2>🎄 2025년 새해 덕담 🎄</h2>
+            <div class="blessing-text" id="blessingText">
+                🌟 2025년 새해에는 당신의 모든 꿈과 희망이 이루어지길 바랍니다.<br>
+                매일 아침 눈을 뜰 때마다 감사함과 행복이 가득하시길!
+            </div>
+            <div class="blessing-nav">
+                <button onclick="prevBlessing()">◀ 이전</button>
+                <button onclick="nextBlessing()">다음 ▶</button>
+            </div>
+        </section>
+
+        <!-- 크레딧 -->
+        <footer class="credits">
+            <div class="creator">Tsun Kim</div>
+            <div class="name-kr">김 경 한</div>
+            <div class="name-en">KIM GYEONG HAN</div>
+        </footer>
+
+        <!-- 컨트롤 -->
+        <div class="controls">
+            <button class="control-btn" onclick="toggleTreeMode()">🎄 트리/산개</button>
+            <button class="control-btn" onclick="toggleSnow()">❄️ 눈</button>
+            <button class="control-btn" onclick="launchFireworks()">🎆 불꽃</button>
+            <button class="control-btn" onclick="toggleAutoRotate()">🔄 자동회전</button>
+            <button class="control-btn" onclick="resetCamera()">🎯 리셋</button>
+            <button class="control-btn" onclick="showBlessings()">💝 덕담</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+        import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+        import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+        // ============================================
+        // 🎄 2025 Christmas Tree
+        // Created by Tsun Kim (김경한)
+        // ============================================
+
+        // --- 설정 (트리 크기 축소하여 한 화면에 다 보이게) ---
+        const CONFIG = {
+            goldCount: 600,      // 금색 구체
+            silverCount: 500,    // 은색 큐브
+            gemCount: 350,       // 빨간 보석
+            emeraldCount: 350,   // 초록 보석
+            dustCount: 1200,     // 먼지 파티클
+            treeHeight: 55,      // 트리 높이 축소 (80 → 55)
+            maxRadius: 22,       // 트리 반경 축소 (32 → 22)
+            camDistance: 100,    // 카메라 거리 조정 (120 → 100)
+            bloomStrength: 0.8,
+            bloomThreshold: 0.3,
+            bloomRadius: 0.7
+        };
+
+        const STATE = { TREE: 'tree', SCATTER: 'scatter' };
+        let currentState = STATE.TREE;
+        
+        // --- Three.js 변수 ---
+        let scene, camera, renderer, composer;
+        let mainGroup = new THREE.Group();
+        let goldMesh, silverMesh, gemMesh, emeraldMesh, dustSystem;
+        
+        // --- 로직 데이터 ---
+        let logicData = { gold: [], silver: [], gem: [], emerald: [], dust: [], star: null };
+        const dummy = new THREE.Object3D();
+        let time = 0;
+        
+        // --- 인터랙션 변수 ---
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+        let autoRotate = true;
+        let rotationVelocity = { x: 0, y: 0 };
+
+        // --- 초기화 ---
+        function init() {
+            const wrapper = document.getElementById('canvas-wrapper');
+            const container = document.getElementById('canvas-container');
+            
+            // 씬
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x050510);
+            scene.fog = new THREE.FogExp2(0x050510, 0.002);
+
+            // 카메라 (트리가 화면에 다 보이도록 조정)
+            camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 5, CONFIG.camDistance);
+
+            // 렌더러
+            renderer = new THREE.WebGLRenderer({ 
+                antialias: true, 
+                powerPreference: "high-performance"
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.2;
+            container.appendChild(renderer.domElement);
+
+            // 조명
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+            scene.add(ambientLight);
+
+            const spotLight = new THREE.SpotLight(0xffddaa, 150);
+            spotLight.position.set(30, 100, 50);
+            spotLight.angle = Math.PI / 4;
+            spotLight.penumbra = 1;
+            scene.add(spotLight);
+
+            const blueLight = new THREE.PointLight(0x4488ff, 80, 250);
+            blueLight.position.set(-50, -30, 50);
+            scene.add(blueLight);
+
+            const redLight = new THREE.PointLight(0xff4444, 50, 200);
+            redLight.position.set(50, 20, -50);
+            scene.add(redLight);
+            
+            // 후처리 (Bloom)
+            const renderScene = new RenderPass(scene, camera);
+            const bloomPass = new UnrealBloomPass(
+                new THREE.Vector2(window.innerWidth, window.innerHeight),
+                CONFIG.bloomStrength,
+                CONFIG.bloomRadius,
+                CONFIG.bloomThreshold
+            );
+
+            composer = new EffectComposer(renderer);
+            composer.addPass(renderScene);
+            composer.addPass(bloomPass);
+
+            // 오브젝트 생성
+            createMaterialsAndMeshes();
+            createDust();
+            createStarField();
+            createTopStar();
+
+            scene.add(mainGroup);
+
+            // 이벤트
+            addEventListeners();
+
+            // 로딩 완료
+            setTimeout(() => {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('hint').style.display = 'block';
+            }, 1500);
+
+            // 애니메이션 시작
+            animate();
+        }
+
+        // --- 재질과 메시 생성 ---
+        function createMaterialsAndMeshes() {
+            // 금색 구체
+            const goldMat = new THREE.MeshPhysicalMaterial({
+                color: 0xffaa00,
+                metalness: 1.0,
+                roughness: 0.15,
+                clearcoat: 1.0,
+                emissive: 0xaa5500,
+                emissiveIntensity: 0.15
+            });
+            
+            // 은색 큐브
+            const silverMat = new THREE.MeshPhysicalMaterial({
+                color: 0xffffff,
+                metalness: 0.95,
+                roughness: 0.1,
+                clearcoat: 1.0,
+                emissive: 0x333333,
+                emissiveIntensity: 0.1
+            });
+            
+            // 빨간 보석 (루비)
+            const gemMat = new THREE.MeshPhysicalMaterial({
+                color: 0xff0044,
+                metalness: 0.1,
+                roughness: 0.0,
+                transmission: 0.6,
+                thickness: 1.5,
+                emissive: 0x550011,
+                emissiveIntensity: 0.5
+            });
+            
+            // 초록 보석 (에메랄드)
+            const emeraldMat = new THREE.MeshPhysicalMaterial({
+                color: 0x00aa55,
+                metalness: 0.2,
+                roughness: 0.1,
+                transmission: 0.5,
+                thickness: 1.5,
+                emissive: 0x002211,
+                emissiveIntensity: 0.4
+            });
+
+            goldMesh = createInstancedMesh(
+                new THREE.SphereGeometry(0.7, 16, 16), 
+                goldMat, 
+                CONFIG.goldCount, 
+                logicData.gold
+            );
+            
+            silverMesh = createInstancedMesh(
+                new THREE.BoxGeometry(0.8, 0.8, 0.8), 
+                silverMat, 
+                CONFIG.silverCount, 
+                logicData.silver
+            );
+            
+            gemMesh = createInstancedMesh(
+                new THREE.OctahedronGeometry(0.9, 0), 
+                gemMat, 
+                CONFIG.gemCount, 
+                logicData.gem
+            );
+            
+            emeraldMesh = createInstancedMesh(
+                new THREE.TetrahedronGeometry(0.8, 0), 
+                emeraldMat, 
+                CONFIG.emeraldCount, 
+                logicData.emerald
+            );
+        }
+
+        function createInstancedMesh(geo, mat, count, dataArray) {
+            const mesh = new THREE.InstancedMesh(geo, mat, count);
+            mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+            mainGroup.add(mesh);
+            
+            for (let i = 0; i < count; i++) {
+                const h = Math.random() * CONFIG.treeHeight - CONFIG.treeHeight / 2;
+                const normH = (h + CONFIG.treeHeight / 2) / CONFIG.treeHeight;
+                const rMax = CONFIG.maxRadius * (1 - normH) * 1.1;
+                
+                const r = Math.sqrt(Math.random()) * rMax;
+                const theta = Math.random() * Math.PI * 2;
+                
+                const treePos = new THREE.Vector3(
+                    r * Math.cos(theta), 
+                    h, 
+                    r * Math.sin(theta)
+                );
+                const scatterPos = randomSpherePoint(35 + Math.random() * 40);
+
+                dataArray.push({
+                    treePos: treePos,
+                    scatterPos: scatterPos,
+                    currentPos: treePos.clone(),
+                    scale: 0.5 + Math.random() * 0.9,
+                    rotSpeed: new THREE.Euler(
+                        Math.random() * 0.03, 
+                        Math.random() * 0.03, 
+                        0
+                    ),
+                    rotation: new THREE.Euler(
+                        Math.random() * Math.PI, 
+                        Math.random() * Math.PI, 
+                        0
+                    )
+                });
+            }
+            return mesh;
+        }
+
+        function randomSpherePoint(r) {
+            const u = Math.random(), v = Math.random();
+            const theta = 2 * Math.PI * u;
+            const phi = Math.acos(2 * v - 1);
+            return new THREE.Vector3(
+                r * Math.sin(phi) * Math.cos(theta),
+                r * Math.sin(phi) * Math.sin(theta),
+                r * Math.cos(phi)
+            );
+        }
+
+        // --- 먼지 파티클 ---
+        function createDust() {
+            const geo = new THREE.BufferGeometry();
+            const pos = new Float32Array(CONFIG.dustCount * 3);
+            const colors = new Float32Array(CONFIG.dustCount * 3);
+            
+            for (let i = 0; i < CONFIG.dustCount; i++) {
+                const h = Math.random() * CONFIG.treeHeight - CONFIG.treeHeight / 2;
+                const r = Math.random() * CONFIG.maxRadius + 5;
+                const theta = Math.random() * Math.PI * 2;
+                
+                const x = r * Math.cos(theta);
+                const z = r * Math.sin(theta);
+                
+                pos[i * 3] = x;
+                pos[i * 3 + 1] = h;
+                pos[i * 3 + 2] = z;
+                
+                // 색상 (금색 ~ 흰색)
+                const t = Math.random();
+                colors[i * 3] = 1;
+                colors[i * 3 + 1] = 0.7 + t * 0.3;
+                colors[i * 3 + 2] = t * 0.3;
+                
+                logicData.dust.push({
+                    treePos: new THREE.Vector3(x, h, z),
+                    scatterPos: randomSpherePoint(55),
+                    currentPos: new THREE.Vector3(x, h, z),
+                    velocity: Math.random() * 0.05 + 0.02
+                });
+            }
+            
+            geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+            geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            
+            const mat = new THREE.PointsMaterial({
+                size: 0.6,
+                transparent: true,
+                opacity: 0.5,
+                vertexColors: true,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false
+            });
+            
+            dustSystem = new THREE.Points(geo, mat);
+            mainGroup.add(dustSystem);
+        }
+
+        // --- 배경 별 ---
+        function createStarField() {
+            const geo = new THREE.BufferGeometry();
+            const pos = [];
+            const colors = [];
+            
+            for (let i = 0; i < 1000; i++) {
+                pos.push(
+                    (Math.random() - 0.5) * 1000,
+                    (Math.random() - 0.5) * 1000,
+                    (Math.random() - 0.5) * 1000
+                );
+                
+                const brightness = 0.3 + Math.random() * 0.7;
+                colors.push(brightness, brightness, brightness);
+            }
+            
+            geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+            geo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+            
+            const stars = new THREE.Points(geo, new THREE.PointsMaterial({
+                size: 1.2,
+                transparent: true,
+                opacity: 0.8,
+                vertexColors: true
+            }));
+            scene.add(stars);
+        }
+
+        // --- 트리 꼭대기 별 ---
+        function createTopStar() {
+            const starGeo = new THREE.OctahedronGeometry(3.0, 0);  // 별 크기 축소
+            const starMat = new THREE.MeshPhysicalMaterial({
+                color: 0xffffff,
+                metalness: 0.9,
+                roughness: 0,
+                emissive: 0xffffaa,
+                emissiveIntensity: 2.0
+            });
+            
+            const star = new THREE.Mesh(starGeo, starMat);
+            star.userData = {
+                treePos: new THREE.Vector3(0, CONFIG.treeHeight / 2 + 3, 0),
+                scatterPos: new THREE.Vector3(0, 50, 0)
+            };
+            star.position.copy(star.userData.treePos);
+            
+            // 별 주변 빛
+            const starLight = new THREE.PointLight(0xffffaa, 80, 40);
+            starLight.position.copy(star.position);
+            mainGroup.add(starLight);
+            
+            mainGroup.add(star);
+            logicData.star = star;
+        }
+
+        // --- 이벤트 리스너 ---
+        function addEventListeners() {
+            window.addEventListener('resize', onWindowResize);
+            
+            renderer.domElement.addEventListener('mousedown', onMouseDown);
+            renderer.domElement.addEventListener('mousemove', onMouseMove);
+            renderer.domElement.addEventListener('mouseup', onMouseUp);
+            renderer.domElement.addEventListener('mouseleave', onMouseUp);
+            renderer.domElement.addEventListener('wheel', onMouseWheel);
+            
+            renderer.domElement.addEventListener('touchstart', onTouchStart);
+            renderer.domElement.addEventListener('touchmove', onTouchMove);
+            renderer.domElement.addEventListener('touchend', onTouchEnd);
+
+            document.addEventListener('keydown', onKeyDown);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            composer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function onMouseDown(e) {
+            isDragging = true;
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+            document.getElementById('hint').style.display = 'none';
+        }
+
+        function onMouseMove(e) {
+            if (!isDragging) return;
+            
+            const deltaX = e.clientX - previousMousePosition.x;
+            const deltaY = e.clientY - previousMousePosition.y;
+            
+            rotationVelocity.y += deltaX * 0.002;
+            rotationVelocity.x += deltaY * 0.001;
+            
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+        }
+
+        function onMouseUp() {
+            isDragging = false;
+        }
+
+        function onMouseWheel(e) {
+            camera.position.z += e.deltaY * 0.05;
+            camera.position.z = Math.max(40, Math.min(180, camera.position.z));
+        }
+
+        function onTouchStart(e) {
+            if (e.touches.length === 1) {
+                isDragging = true;
+                previousMousePosition = { 
+                    x: e.touches[0].clientX, 
+                    y: e.touches[0].clientY 
+                };
+            }
+        }
+
+        function onTouchMove(e) {
+            if (!isDragging || e.touches.length !== 1) return;
+            
+            const deltaX = e.touches[0].clientX - previousMousePosition.x;
+            rotationVelocity.y += deltaX * 0.002;
+            
+            previousMousePosition = { 
+                x: e.touches[0].clientX, 
+                y: e.touches[0].clientY 
+            };
+        }
+
+        function onTouchEnd() {
+            isDragging = false;
+        }
+
+        function onKeyDown(e) {
+            switch(e.key.toLowerCase()) {
+                case 't': window.toggleTreeMode(); break;
+                case 's': window.toggleSnow(); break;
+                case 'f': window.launchFireworks(); break;
+                case 'r': window.toggleAutoRotate(); break;
+                case 'b': window.showBlessings(); break;
+            }
+        }
+
+        // --- 애니메이션 루프 ---
+        function animate() {
+            requestAnimationFrame(animate);
+            time += 0.01;
+
+            // 메시 업데이트
+            updateMeshLogic(goldMesh, logicData.gold);
+            updateMeshLogic(silverMesh, logicData.silver);
+            updateMeshLogic(gemMesh, logicData.gem);
+            updateMeshLogic(emeraldMesh, logicData.emerald);
+
+            // 먼지 업데이트
+            updateDustLogic();
+
+            // 별 업데이트
+            if (logicData.star) {
+                const target = currentState === STATE.TREE 
+                    ? logicData.star.userData.treePos 
+                    : logicData.star.userData.scatterPos;
+                logicData.star.position.lerp(target, 0.05);
+                logicData.star.rotation.y += 0.02;
+                logicData.star.rotation.x = Math.sin(time) * 0.2;
+            }
+
+            // 회전 처리
+            handleRotation();
+
+            composer.render();
+        }
+
+        function handleRotation() {
+            if (autoRotate && !isDragging) {
+                if (currentState === STATE.TREE) {
+                    mainGroup.rotation.y += 0.003;
+                } else {
+                    mainGroup.rotation.y += 0.001;
+                }
+            }
+            
+            // 관성 적용
+            mainGroup.rotation.y += rotationVelocity.y;
+            mainGroup.rotation.x += rotationVelocity.x;
+            
+            // 감쇠
+            rotationVelocity.y *= 0.95;
+            rotationVelocity.x *= 0.95;
+            
+            // X축 복원
+            mainGroup.rotation.x *= 0.98;
+            
+            // X축 제한
+            mainGroup.rotation.x = Math.max(-0.5, Math.min(0.5, mainGroup.rotation.x));
+        }
+
+        function updateMeshLogic(mesh, dataArray) {
+            const isTree = currentState === STATE.TREE;
+
+            for (let i = 0; i < dataArray.length; i++) {
+                const item = dataArray[i];
+                const target = isTree ? item.treePos : item.scatterPos;
+
+                // 산개 상태에서 호흡 효과
+                if (!isTree) {
+                    item.currentPos.y += Math.sin(time + i * 0.1) * 0.015;
+                }
+
+                // 위치 보간
+                item.currentPos.lerp(target, 0.06);
+
+                // 자체 회전
+                item.rotation.x += item.rotSpeed.x;
+                item.rotation.y += item.rotSpeed.y;
+
+                dummy.position.copy(item.currentPos);
+                dummy.rotation.copy(item.rotation);
+                dummy.scale.setScalar(item.scale);
+                dummy.updateMatrix();
+                mesh.setMatrixAt(i, dummy.matrix);
+            }
+            mesh.instanceMatrix.needsUpdate = true;
+        }
+
+        function updateDustLogic() {
+            const positions = dustSystem.geometry.attributes.position.array;
+            const isTree = currentState === STATE.TREE;
+
+            for (let i = 0; i < logicData.dust.length; i++) {
+                const item = logicData.dust[i];
+
+                if (isTree) {
+                    // 트리 상태: 위로 상승
+                    item.currentPos.y += item.velocity;
+                    if (item.currentPos.y > CONFIG.treeHeight / 2) {
+                        item.currentPos.y = -CONFIG.treeHeight / 2;
+                    }
+
+                    // 원뿔 범위 제한
+                    const rMax = CONFIG.maxRadius * 
+                        (1 - (item.currentPos.y + CONFIG.treeHeight / 2) / CONFIG.treeHeight) + 5;
+                    const rCurr = Math.sqrt(
+                        item.currentPos.x ** 2 + item.currentPos.z ** 2
+                    );
+                    if (rCurr > rMax) {
+                        item.currentPos.x *= 0.95;
+                        item.currentPos.z *= 0.95;
+                    }
+                } else {
+                    // 산개 상태
+                    item.currentPos.lerp(item.scatterPos, 0.03);
+                }
+
+                positions[i * 3] = item.currentPos.x;
+                positions[i * 3 + 1] = item.currentPos.y;
+                positions[i * 3 + 2] = item.currentPos.z;
+            }
+            dustSystem.geometry.attributes.position.needsUpdate = true;
+        }
+
+        // --- 전역 함수 (UI 버튼용) ---
+        window.toggleTreeMode = function() {
+            currentState = currentState === STATE.TREE ? STATE.SCATTER : STATE.TREE;
+        };
+
+        window.toggleAutoRotate = function() {
+            autoRotate = !autoRotate;
+        };
+
+        window.resetCamera = function() {
+            camera.position.set(0, 5, CONFIG.camDistance);
+            mainGroup.rotation.set(0, 0, 0);
+            rotationVelocity = { x: 0, y: 0 };
+        };
+
+        // --- 눈 효과 ---
+        const snowflakesContainer = document.getElementById('snowflakes');
+        const snowflakeChars = ['❄', '❅', '❆', '✻', '✼', '❉'];
+        let snowEnabled = true;
+
+        function createSnowflake() {
+            if (!snowEnabled) return;
+            
+            const snowflake = document.createElement('div');
+            snowflake.className = 'snowflake';
+            snowflake.textContent = snowflakeChars[Math.floor(Math.random() * snowflakeChars.length)];
+            snowflake.style.left = Math.random() * 100 + 'vw';
+            snowflake.style.fontSize = (Math.random() * 1.5 + 0.5) + 'rem';
+            snowflake.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            snowflakesContainer.appendChild(snowflake);
+            setTimeout(() => snowflake.remove(), 12000);
+        }
+
+        setInterval(createSnowflake, 250);
+
+        window.toggleSnow = function() {
+            snowEnabled = !snowEnabled;
+            if (!snowEnabled) snowflakesContainer.innerHTML = '';
+        };
+
+        // --- 불꽃놀이 ---
+        window.launchFireworks = function() {
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    createFirework(
+                        Math.random() * window.innerWidth,
+                        Math.random() * window.innerHeight * 0.5 + 50
+                    );
+                }, i * 300);
+            }
+        };
+
+        function createFirework(x, y) {
+            const colors = ['#ff0000', '#ffd700', '#00ff00', '#00ffff', '#ff00ff', '#ff6b6b'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'firework-particle';
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                particle.style.backgroundColor = color;
+                particle.style.boxShadow = `0 0 6px ${color}`;
+                
+                const angle = (i / 30) * Math.PI * 2;
+                const velocity = 50 + Math.random() * 100;
+                particle.style.setProperty('--tx', Math.cos(angle) * velocity + 'px');
+                particle.style.setProperty('--ty', Math.sin(angle) * velocity + 'px');
+                
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 1500);
+            }
+        }
+
+        // --- 덕담 ---
+        const blessings = [
+            { emoji: '🌟', text: '2025년 새해에는 당신의 모든 꿈과 희망이 이루어지길 바랍니다.<br>매일 아침 눈을 뜰 때마다 감사함과 행복이 가득하시길!' },
+            { emoji: '💝', text: '사랑하는 사람들과 함께하는 따뜻한 순간들이 늘 함께하시고,<br>웃음이 끊이지 않는 한 해가 되시길 진심으로 기원합니다.' },
+            { emoji: '🍀', text: '건강은 모든 행복의 기초입니다. 2025년에는 몸도 마음도 건강하게,<br>하루하루가 활력 넘치는 날들이 되시길 바랍니다!' },
+            { emoji: '✨', text: '도전을 두려워하지 마세요. 새해에는 새로운 시작이 가져다줄<br>무한한 가능성을 믿고, 용기 있게 한 걸음 내딛으시길!' },
+            { emoji: '🎁', text: '2025년, 당신에게 찾아올 모든 순간들이 선물처럼 소중하고,<br>크리스마스의 따뜻함이 365일 내내 함께하시길 바랍니다!' }
+        ];
+        let currentBlessing = 0;
+
+        window.showBlessings = function() {
+            document.getElementById('blessingsPanel').classList.add('show');
+            updateBlessingText();
+        };
+
+        window.closeBlessings = function() {
+            document.getElementById('blessingsPanel').classList.remove('show');
+        };
+
+        function updateBlessingText() {
+            const b = blessings[currentBlessing];
+            document.getElementById('blessingText').innerHTML = `${b.emoji} ${b.text}`;
+        }
+
+        window.nextBlessing = function() {
+            currentBlessing = (currentBlessing + 1) % blessings.length;
+            updateBlessingText();
+        };
+
+        window.prevBlessing = function() {
+            currentBlessing = (currentBlessing - 1 + blessings.length) % blessings.length;
+            updateBlessingText();
+        };
+
+        // --- 마우스 트레일 ---
+        let trailCount = 0;
+        document.addEventListener('mousemove', (e) => {
+            trailCount++;
+            if (trailCount % 6 !== 0) return;
+            
+            const trail = document.createElement('div');
+            trail.className = 'mouse-trail';
+            trail.textContent = ['✨', '⭐', '❄'][Math.floor(Math.random() * 3)];
+            trail.style.left = e.clientX + 'px';
+            trail.style.top = e.clientY + 'px';
+            document.body.appendChild(trail);
+            setTimeout(() => trail.remove(), 1000);
+        });
+
+        // --- 시작 ---
+        init();
+
+        // 초기 불꽃놀이
+        setTimeout(() => window.launchFireworks(), 2000);
+
+        console.log(`
+        🎄 Merry Christmas 2025! 🎄
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        
+        ✨ Created by Tsun Kim ✨
+        김경한 (KIM GYEONG HAN)
+        
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        🎁 Happy New Year! 🎁
+        `);
+    </script>
+</body>
+</html>
