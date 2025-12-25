@@ -1287,8 +1287,8 @@
                 // 좌우 회전 (Y축)
                 rotationVelocity.y += deltaX * 0.005;
                 
-                // 상하 회전 (X축) - 360도 자유 회전
-                rotationVelocity.x += deltaY * 0.005;
+                // 상하 회전 (X축) - 감도 낮춤
+                rotationVelocity.x += deltaY * 0.002;
                 
                 previousMousePosition = { 
                     x: e.touches[0].clientX, 
