@@ -726,6 +726,11 @@
     </script>
 </head>
 <body>
+    <!-- 배경 음악 (고요한 밤 거룩한 밤) -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="music/[No Copyright Music] 고요한 밤 거룩한 밤(Silent Night Holy Night) by. 상상작곡가(무료캐롤).mp3" type="audio/mpeg">
+    </audio>
+
     <div id="canvas-wrapper">
         <div id="canvas-container"></div>
 
@@ -785,6 +790,7 @@
                 <button class="control-btn" onclick="toggleAutoRotate()">🔄 자동회전</button>
                 <button class="control-btn" onclick="resetCamera()">🎯 리셋</button>
                 <button class="control-btn" onclick="showBlessings()">💝 덕담</button>
+                <button class="control-btn" id="musicBtn" onclick="toggleMusic()">🔊 음악</button>
             </div>
         </div>
     </div>
@@ -833,6 +839,60 @@
         let previousMousePosition = { x: 0, y: 0 };
         let autoRotate = true;
         let rotationVelocity = { x: 0, y: 0 };
+
+        // --- 배경 음악 ---
+        const bgMusic = document.getElementById('bgMusic');
+        let musicPlaying = false;
+
+        function tryPlayMusic() {
+            if (bgMusic && !musicPlaying) {
+                bgMusic.volume = 0.4; // 볼륨 40%
+                const playPromise = bgMusic.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        musicPlaying = true;
+                        updateMusicButton();
+                    }).catch((error) => {
+                        // 자동 재생이 차단된 경우, 사용자 상호작용 후 재생
+                        console.log('자동 재생 차단됨. 사용자 상호작용 필요.');
+                        document.addEventListener('click', playMusicOnInteraction, { once: true });
+                        document.addEventListener('touchstart', playMusicOnInteraction, { once: true });
+                    });
+                }
+            }
+        }
+
+        function playMusicOnInteraction() {
+            if (bgMusic && !musicPlaying) {
+                bgMusic.volume = 0.4;
+                bgMusic.play().then(() => {
+                    musicPlaying = true;
+                    updateMusicButton();
+                }).catch(e => console.log('음악 재생 실패:', e));
+            }
+        }
+
+        function toggleMusic() {
+            if (bgMusic) {
+                if (musicPlaying) {
+                    bgMusic.pause();
+                    musicPlaying = false;
+                } else {
+                    bgMusic.play().then(() => {
+                        musicPlaying = true;
+                    }).catch(e => console.log('음악 재생 실패:', e));
+                }
+                updateMusicButton();
+            }
+        }
+
+        function updateMusicButton() {
+            const musicBtn = document.getElementById('musicBtn');
+            if (musicBtn) {
+                musicBtn.innerHTML = musicPlaying ? '🔊 음악' : '🔇 음악';
+            }
+        }
 
         // --- 초기화 ---
         function init() {
@@ -904,6 +964,9 @@
             // 로딩 완료
             setTimeout(() => {
                 document.getElementById('loading').style.display = 'none';
+                
+                // 배경 음악 자동 재생 시도
+                tryPlayMusic();
             }, 1500);
 
             // 애니메이션 시작
