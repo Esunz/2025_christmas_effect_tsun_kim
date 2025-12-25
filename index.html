@@ -2,7 +2,11 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#050510">
     <title>🎄 2025 Christmas Tree by Tsun Kim 🎄</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -361,12 +365,297 @@
             100% { opacity: 0; transform: scale(0.5) translateY(-20px); }
         }
 
-        /* 반응형 */
+        /* =============================================
+           반응형 디자인 - 스마트폰 해상도별 최적화
+           ============================================= */
+
+        /* 모바일 터치 힌트 */
+        .mobile-hint {
+            display: none;
+            position: absolute;
+            bottom: 180px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 12px 20px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.8rem;
+            text-align: center;
+            z-index: 100;
+            pointer-events: none;
+            animation: fadeInOut 3s ease-in-out infinite;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* 줌 컨트롤 (모바일용) */
+        .zoom-controls {
+            display: none;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .zoom-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            background: rgba(0, 0, 0, 0.6);
+            color: #ffd700;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            touch-action: manipulation;
+        }
+
+        .zoom-btn:active {
+            background: rgba(255, 215, 0, 0.3);
+            transform: scale(0.95);
+        }
+
+        /* ===== 태블릿 (768px ~ 1024px) ===== */
+        @media (max-width: 1024px) {
+            .header h1 { font-size: 2rem; letter-spacing: 4px; }
+            .header .year { font-size: 0.9rem; }
+            .credits .creator { font-size: 1.8rem; }
+            .credits .name-kr { font-size: 1rem; letter-spacing: 0.5rem; }
+            .control-btn { padding: 11px 16px; font-size: 0.8rem; }
+        }
+
+        /* ===== 모바일 가로모드 & 작은 태블릿 (480px ~ 768px) ===== */
         @media (max-width: 768px) {
-            .header h1 { font-size: 1.5rem; letter-spacing: 3px; }
-            .header .year { font-size: 0.8rem; letter-spacing: 0.5rem; }
-            .credits .creator { font-size: 1.3rem; }
-            .control-btn { padding: 10px 14px; font-size: 0.75rem; }
+            .header { top: 30px; }
+            .header h1 { font-size: 1.6rem; letter-spacing: 3px; }
+            .header .year { font-size: 0.75rem; letter-spacing: 0.2rem; }
+            
+            .credits { 
+                bottom: 140px; 
+                padding: 12px 25px;
+            }
+            .credits .creator { font-size: 1.4rem; }
+            .credits .name-kr { font-size: 0.85rem; letter-spacing: 0.4rem; }
+            .credits .name-en { font-size: 0.75rem; }
+
+            .controls {
+                bottom: 15px;
+                gap: 8px;
+                padding: 0 10px;
+            }
+            .control-btn { 
+                padding: 10px 12px; 
+                font-size: 0.7rem; 
+                border-radius: 25px;
+            }
+
+            .mobile-hint { display: block; }
+            .zoom-controls { display: flex; }
+            .status { display: none; }
+
+            .blessings-panel {
+                width: 95%;
+                padding: 25px 20px;
+            }
+            .blessings-panel h2 { font-size: 1.3rem; }
+            .blessing-text { font-size: 0.95rem; line-height: 1.7; }
+            .blessing-nav button { padding: 10px 20px; font-size: 0.85rem; }
+        }
+
+        /* ===== 일반 스마트폰 세로모드 (375px ~ 480px) - iPhone, Galaxy 등 ===== */
+        @media (max-width: 480px) {
+            .header { top: 25px; }
+            .header h1 { font-size: 1.4rem; letter-spacing: 2px; }
+            .header .year { font-size: 0.7rem; letter-spacing: 0.15rem; margin-top: 5px; }
+
+            .credits { 
+                bottom: 130px; 
+                padding: 10px 20px;
+                max-width: 90%;
+            }
+            .credits .creator { font-size: 1.2rem; }
+            .credits .name-kr { 
+                font-size: 0.75rem; 
+                letter-spacing: 0.3rem; 
+                margin-top: 5px;
+            }
+            .credits .name-en { font-size: 0.65rem; margin-top: 3px; }
+
+            .controls {
+                bottom: 12px;
+                gap: 6px;
+                padding: 0 8px;
+            }
+            .control-btn { 
+                padding: 9px 10px; 
+                font-size: 0.65rem;
+                letter-spacing: 0;
+            }
+
+            .mobile-hint { 
+                bottom: 170px; 
+                font-size: 0.7rem;
+                padding: 10px 15px;
+            }
+
+            .zoom-controls { right: 10px; gap: 8px; }
+            .zoom-btn { width: 44px; height: 44px; font-size: 1.3rem; }
+
+            .blessings-panel {
+                padding: 20px 15px;
+                border-radius: 15px;
+            }
+            .blessings-panel h2 { font-size: 1.1rem; margin-bottom: 15px; }
+            .blessing-text { font-size: 0.85rem; line-height: 1.6; margin-bottom: 15px; }
+            .blessing-nav { gap: 10px; }
+            .blessing-nav button { padding: 8px 16px; font-size: 0.8rem; }
+            .close-btn { top: 10px; right: 10px; font-size: 1.3rem; }
+        }
+
+        /* ===== 작은 스마트폰 (320px ~ 375px) - iPhone SE, 소형폰 ===== */
+        @media (max-width: 375px) {
+            .header { top: 20px; }
+            .header h1 { font-size: 1.2rem; letter-spacing: 1px; }
+            .header .year { font-size: 0.6rem; letter-spacing: 0.1rem; }
+
+            .credits { 
+                bottom: 120px; 
+                padding: 8px 15px;
+            }
+            .credits .creator { font-size: 1rem; }
+            .credits .name-kr { font-size: 0.65rem; letter-spacing: 0.2rem; }
+            .credits .name-en { display: none; }
+
+            .controls { gap: 5px; }
+            .control-btn { 
+                padding: 8px 8px; 
+                font-size: 0.6rem;
+            }
+
+            .mobile-hint { bottom: 155px; font-size: 0.65rem; }
+            .zoom-btn { width: 40px; height: 40px; font-size: 1.2rem; }
+
+            .blessings-panel h2 { font-size: 1rem; }
+            .blessing-text { font-size: 0.8rem; }
+        }
+
+        /* ===== 매우 작은 화면 (320px 미만) ===== */
+        @media (max-width: 320px) {
+            .header h1 { font-size: 1rem; }
+            .header .year { font-size: 0.55rem; }
+            .credits .creator { font-size: 0.9rem; }
+            .credits .name-kr { font-size: 0.6rem; }
+            .control-btn { padding: 7px 6px; font-size: 0.55rem; }
+        }
+
+        /* ===== 가로 모드 (Landscape) 최적화 ===== */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .header { top: 10px; }
+            .header h1 { font-size: 1.2rem; }
+            .header .year { font-size: 0.6rem; margin-top: 3px; }
+
+            .credits { 
+                bottom: auto;
+                top: 10px;
+                right: 10px;
+                left: auto;
+                transform: none;
+                padding: 8px 15px;
+                text-align: right;
+            }
+            .credits .creator { font-size: 1rem; }
+            .credits .name-kr { font-size: 0.6rem; letter-spacing: 0.2rem; }
+            .credits .name-en { display: none; }
+
+            .controls {
+                bottom: 8px;
+                gap: 5px;
+            }
+            .control-btn { padding: 8px 10px; font-size: 0.65rem; }
+
+            .mobile-hint { bottom: 60px; }
+            .zoom-controls { 
+                top: auto;
+                bottom: 60px;
+                transform: none;
+            }
+
+            .blessings-panel {
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+        }
+
+        /* ===== 노치/다이나믹 아일랜드 대응 (iPhone X 이상) ===== */
+        @supports (padding: env(safe-area-inset-top)) {
+            .header {
+                top: calc(25px + env(safe-area-inset-top));
+            }
+            .controls {
+                bottom: calc(15px + env(safe-area-inset-bottom));
+            }
+            .credits {
+                bottom: calc(130px + env(safe-area-inset-bottom));
+            }
+        }
+
+        /* ===== 터치 디바이스 최적화 ===== */
+        @media (hover: none) and (pointer: coarse) {
+            .control-btn:hover {
+                transform: none;
+                box-shadow: none;
+            }
+            .control-btn:active {
+                background: rgba(255, 215, 0, 0.3);
+                transform: scale(0.95);
+            }
+            .blessing-nav button:hover {
+                background: transparent;
+                color: #ffd700;
+            }
+            .blessing-nav button:active {
+                background: #ffd700;
+                color: #000;
+            }
+        }
+
+        /* ===== 다크모드 시스템 설정 대응 ===== */
+        @media (prefers-color-scheme: dark) {
+            /* 이미 다크 테마이므로 추가 조정 없음 */
+        }
+
+        /* ===== 고대비 모드 ===== */
+        @media (prefers-contrast: high) {
+            .control-btn {
+                border-width: 2px;
+            }
+            .credits {
+                border-width: 2px;
+            }
+        }
+
+        /* ===== 애니메이션 감소 모드 ===== */
+        @media (prefers-reduced-motion: reduce) {
+            .snowflake,
+            .mouse-trail,
+            .firework-particle {
+                animation: none;
+            }
+            .header h1,
+            .credits .creator {
+                animation: none;
+            }
         }
     </style>
     
@@ -397,9 +686,20 @@
             <div class="year">✦ 2 0 2 5 ✦</div>
         </header>
 
-        <!-- 힌트 -->
+        <!-- 힌트 (PC) -->
         <div class="status" id="hint">
             🖱️ 드래그로 회전 • 스크롤로 확대/축소
+        </div>
+
+        <!-- 모바일 힌트 -->
+        <div class="mobile-hint" id="mobileHint">
+            👆 한 손가락으로 회전 • 두 손가락으로 확대/축소
+        </div>
+
+        <!-- 줌 컨트롤 (모바일용) -->
+        <div class="zoom-controls" id="zoomControls">
+            <button class="zoom-btn" onclick="zoomIn()" aria-label="확대">+</button>
+            <button class="zoom-btn" onclick="zoomOut()" aria-label="축소">−</button>
         </div>
 
         <!-- 눈 효과 -->
@@ -797,9 +1097,9 @@
             renderer.domElement.addEventListener('mouseleave', onMouseUp);
             renderer.domElement.addEventListener('wheel', onMouseWheel);
             
-            renderer.domElement.addEventListener('touchstart', onTouchStart);
-            renderer.domElement.addEventListener('touchmove', onTouchMove);
-            renderer.domElement.addEventListener('touchend', onTouchEnd);
+            renderer.domElement.addEventListener('touchstart', onTouchStart, { passive: false });
+            renderer.domElement.addEventListener('touchmove', onTouchMove, { passive: false });
+            renderer.domElement.addEventListener('touchend', onTouchEnd, { passive: false });
 
             document.addEventListener('keydown', onKeyDown);
         }
@@ -838,31 +1138,88 @@
             camera.position.z = Math.max(40, Math.min(180, camera.position.z));
         }
 
+        // --- 모바일 터치 인터랙션 (개선) ---
+        let touchStartDistance = 0;
+        let initialCameraZ = CONFIG.camDistance;
+        let lastTouchTime = 0;
+
         function onTouchStart(e) {
+            e.preventDefault();
+            
+            // 모바일 힌트 숨기기
+            const mobileHint = document.getElementById('mobileHint');
+            if (mobileHint) mobileHint.style.display = 'none';
+
             if (e.touches.length === 1) {
+                // 한 손가락: 회전
                 isDragging = true;
                 previousMousePosition = { 
                     x: e.touches[0].clientX, 
                     y: e.touches[0].clientY 
                 };
+
+                // 더블탭 감지
+                const now = Date.now();
+                if (now - lastTouchTime < 300) {
+                    // 더블탭: 트리/산개 토글
+                    window.toggleTreeMode();
+                }
+                lastTouchTime = now;
+
+            } else if (e.touches.length === 2) {
+                // 두 손가락: 핀치 줌
+                isDragging = false;
+                touchStartDistance = getTouchDistance(e.touches);
+                initialCameraZ = camera.position.z;
             }
         }
 
         function onTouchMove(e) {
-            if (!isDragging || e.touches.length !== 1) return;
-            
-            const deltaX = e.touches[0].clientX - previousMousePosition.x;
-            rotationVelocity.y += deltaX * 0.002;
-            
-            previousMousePosition = { 
-                x: e.touches[0].clientX, 
-                y: e.touches[0].clientY 
-            };
+            e.preventDefault();
+
+            if (e.touches.length === 1 && isDragging) {
+                // 한 손가락: 회전
+                const deltaX = e.touches[0].clientX - previousMousePosition.x;
+                const deltaY = e.touches[0].clientY - previousMousePosition.y;
+                
+                rotationVelocity.y += deltaX * 0.003;  // 더 민감하게
+                rotationVelocity.x += deltaY * 0.0015;
+                
+                previousMousePosition = { 
+                    x: e.touches[0].clientX, 
+                    y: e.touches[0].clientY 
+                };
+
+            } else if (e.touches.length === 2) {
+                // 두 손가락: 핀치 줌
+                const currentDistance = getTouchDistance(e.touches);
+                const scale = touchStartDistance / currentDistance;
+                
+                camera.position.z = Math.max(40, Math.min(180, initialCameraZ * scale));
+            }
         }
 
-        function onTouchEnd() {
+        function onTouchEnd(e) {
             isDragging = false;
+            if (e.touches.length === 0) {
+                touchStartDistance = 0;
+            }
         }
+
+        function getTouchDistance(touches) {
+            const dx = touches[0].clientX - touches[1].clientX;
+            const dy = touches[0].clientY - touches[1].clientY;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
+
+        // 줌 버튼 함수 (모바일용)
+        window.zoomIn = function() {
+            camera.position.z = Math.max(40, camera.position.z - 10);
+        };
+
+        window.zoomOut = function() {
+            camera.position.z = Math.min(180, camera.position.z + 10);
+        };
 
         function onKeyDown(e) {
             switch(e.key.toLowerCase()) {
@@ -1100,19 +1457,54 @@
             updateBlessingText();
         };
 
-        // --- 마우스 트레일 ---
+        // --- 마우스 트레일 (PC만) ---
         let trailCount = 0;
-        document.addEventListener('mousemove', (e) => {
-            trailCount++;
-            if (trailCount % 6 !== 0) return;
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        
+        if (!isTouchDevice) {
+            document.addEventListener('mousemove', (e) => {
+                trailCount++;
+                if (trailCount % 6 !== 0) return;
+                
+                const trail = document.createElement('div');
+                trail.className = 'mouse-trail';
+                trail.textContent = ['✨', '⭐', '❄'][Math.floor(Math.random() * 3)];
+                trail.style.left = e.clientX + 'px';
+                trail.style.top = e.clientY + 'px';
+                document.body.appendChild(trail);
+                setTimeout(() => trail.remove(), 1000);
+            });
+        }
+
+        // --- 모바일 성능 최적화 ---
+        function isMobile() {
+            return window.innerWidth <= 768 || isTouchDevice;
+        }
+
+        // 모바일에서 파티클 수 줄이기
+        if (isMobile()) {
+            // 눈 생성 간격 늘리기
+            clearInterval(window.snowInterval);
+        }
+
+        // 화면 방향 변경 감지
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                onWindowResize();
+            }, 100);
+        });
+
+        // 화면 사이즈 변경 시 모바일 UI 업데이트
+        window.addEventListener('resize', () => {
+            const zoomControls = document.getElementById('zoomControls');
+            const mobileHint = document.getElementById('mobileHint');
             
-            const trail = document.createElement('div');
-            trail.className = 'mouse-trail';
-            trail.textContent = ['✨', '⭐', '❄'][Math.floor(Math.random() * 3)];
-            trail.style.left = e.clientX + 'px';
-            trail.style.top = e.clientY + 'px';
-            document.body.appendChild(trail);
-            setTimeout(() => trail.remove(), 1000);
+            if (window.innerWidth <= 768) {
+                if (zoomControls) zoomControls.style.display = 'flex';
+            } else {
+                if (zoomControls) zoomControls.style.display = 'none';
+                if (mobileHint) mobileHint.style.display = 'none';
+            }
         });
 
         // --- 시작 ---
